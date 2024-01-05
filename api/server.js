@@ -1,11 +1,13 @@
 const express = require('express');
 const server = express();
-require('dotenv').config()
-
-
 
 server.use(express.json());
+require('dotenv').config()
 
+const projectsRouter = require('./projects/projects-router')
+
+
+server.use('/api/projects',projectsRouter)
 
 
 server.use("*", (req,res) => {
