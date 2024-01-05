@@ -82,8 +82,24 @@ router.put('/:id', async (req,res)=> {
     });
 
 
-router.delete('/:id', (req,res)=> {
-    res.json({message: "DELETE Request for Projects"})
+router.delete('/:id', async (req,res)=> {
+    try {
+        const {id} = req.params
+        const deletedProject = await Adopter.remove(id)
+        if(deletedProject === 1){
+            res.status(204).json({
+                message: 'delete succesful'
+            })
+        }else{
+            res.status(404).json({message: "Project not found"})
+        }
+       
+    }catch(err){
+        res.status(500).json({
+            err: err.message,
+            message: 'error'
+        })
+    }
 })
 
 router.get('/:id/actions', (req,res)=> {
