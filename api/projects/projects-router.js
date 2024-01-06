@@ -102,8 +102,24 @@ router.delete('/:id', async (req,res)=> {
     }
 })
 
-router.get('/:id/actions', (req,res)=> {
-    res.json({message: "GET Request with ID for Projects"})
+router.get('/:id/actions', async (req,res)=> {
+    try {
+      const {id} = req.params
+        if(!id){
+            res.json(404).json({
+                Message: 'no ID found'
+            })
+        } else{
+            const actions = await Adopter.getProjectActions(id)
+            console.log(actions)
+            res.status(200).json(actions)
+        }
+    }catch(err){
+        res.status(500).json({
+            err: err.message,
+            message: 'error'
+        })
+    }
 })
 
 module.exports = router
