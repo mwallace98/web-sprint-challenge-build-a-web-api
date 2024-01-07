@@ -51,11 +51,49 @@ router.post('/',  (req,res)=> {
     
     
 });
-router.put('/:id', (req,res)=> {
+router.put('/:id', async (req,res)=> {
+    try {
+        const { id } = req.params;
+        const changes = req.body;
+        console.log(changes);
     
+        if (!changes || !changes.project_id || !changes.description || !changes.notes) {
+          return res.status(400).json({ error: 'missing required fields' });
+        }
+    
+        const updatedAction = await Adopter.update(id, changes);
+    
+        if (updatedAction) {
+          res.json(updatedAction);
+        } else {
+          res.status(404).json({ message: 'project not found' });
+        }
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({
+          error: 'error updating',
+          message: error.message,
+        });
+      }
 });
-router.delete('/:id', (req,res)=> {
-    
+router.delete('/:id', async (req,res)=> {
+    try {
+        const {id} = req.params
+        const deletedAction = await Adopter.remove(id)
+        if(deletedAction === 1){
+            res.status(204).json({
+                message: 'delete succesful'
+            })
+        }else{
+            res.status(404).json({message: "Project not found"})
+        }
+       
+    }catch(err){
+        res.status(500).json({
+            err: err.message,
+            message: 'error'
+        })
+    }
 });
 
 
