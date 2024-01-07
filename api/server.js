@@ -5,9 +5,11 @@ server.use(express.json());
 require('dotenv').config()
 
 const projectsRouter = require('./projects/projects-router')
+const ActionsRouter = require('./actions/actions-router')
 
 
 server.use('/api/projects',projectsRouter)
+server.use('/api/actions', ActionsRouter)
 
 
 server.use("*", (req,res) => {
